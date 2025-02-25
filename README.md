@@ -3,8 +3,9 @@
 Slack App providing a Message Shortcut to create Zammad ticket from Slack
 message
 
-## Install
+@luca read the rought [TODO](TODO.md)
 
+## Install
 
 ### Prepare Slack
 
@@ -58,9 +59,10 @@ Install requirements with Pip of if you have a working nix with flake enabled.
 
 nix develop
 
-## Start application
+### Start application
 
 python app.py
+
 
 ## Credits
 
