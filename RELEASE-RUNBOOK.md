@@ -1,5 +1,17 @@
 # Release Runbook
 
+## In between changes
+
+- Update [CHANGELOG.md](CHANGELOG.md)
+  - place changes under top header ``## **WORK IN PROGRESS**`` 
+  - Never fill in a version, except when you create a new release.
+  - add lines per change
+  - you may refer to documentation using markdown links
+  - use emoji's when you're enthousiastic
+
+
+## Create new release
+
 - Bump version in [VERSION.txt](VERSION.txt) See which kind of version below.
 
 | Please choose a version                  | Version description                                                           |
@@ -13,6 +25,7 @@
 |   0.19.6-alpha.0 or similar (prepatch)   | To provide test versions before a patch release.                              |
 
 - Update [CHANGELOG.md](CHANGELOG.md)
+  - use git log to add forgotten changes
   - Copy `## **WORK IN PROGRESS**` and change new header to `## vX.X.X (2025-12-31)`
 
 - commit everything which is dirty
@@ -22,4 +35,3 @@
 - push tag `git push --tags`
 
 - In https://github.com/wearetechnative/slack2zammad create release from newly made tag.
-
