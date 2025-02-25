@@ -63,6 +63,12 @@ nix develop
 
 python app.py
 
+## Project Maintainers
+
+Read the docs
+
+- [Release runbook](RELEASE-RUNBOOK.md)
+
 
 ## Credits
 

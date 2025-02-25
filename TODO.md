@@ -30,3 +30,6 @@ services.slack2zammad = {
 - Add link to original message in slack channel in Zammad ticket.
 - Full documentation
 - PR in nixos/nixpkgs
+- CONTRIBUTE.md
+- Logo and header info about TechNative
+- Create project logo
