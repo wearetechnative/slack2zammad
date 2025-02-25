@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## **WORK IN PROGRESS**
+- ...
+
 ## v0.1.0 Initial working version
 
 - First official release 🎉
