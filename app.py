@@ -2,12 +2,41 @@ import os
 import pprint
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-
+import sys
+import argparse
 from dotenv import load_dotenv
+import logging
+from _version import __version__
 
 from zammadoo import Client
 
-load_dotenv()
+# Some basic logging 
+logging.basicConfig(level=logging.INFO)
+
+# Get current directory with .env
+current_dir = os.getcwd()
+dotenv_path = os.path.join(current_dir, '.env')
+
+# Argument Parser
+parser = argparse.ArgumentParser()
+parser.add_argument("-e", "--envfile", type=str, help=f'The ".env" file location (default: {dotenv_path})')
+parser.add_argument("-v", "--version", action="version", version=f'slack2zammad: {__version__}')
+args = parser.parse_args()
+envfile = args.envfile
+
+# Environment File
+if envfile == None: 
+    load_dotenv(dotenv_path=dotenv_path)
+
+elif envfile == envfile:
+    file_exist = os.path.isfile(envfile)
+
+    if file_exist == True:
+        #print(envfile)
+        load_dotenv(dotenv_path=envfile)
+    else:
+        print("EnvironmentFile not found")
+        exit() 
 
 APPTOKEN = os.environ.get("SLACK_BOT_TOKEN")
 BOTTOKEN = os.environ.get("SLACK_APP_TOKEN")
@@ -165,11 +194,15 @@ def handle_view_submission_events(ack, body, logger):
     title = get_field_value_from_modal_body(body, "inputid_ticket_title" )
     text = get_field_value_from_modal_body(body, "inputid_ticket_text" )
 
-    zamclient.tickets.create(title, "Managed Services Supportdesk", "", text)
+    zamclient.tickets.create(title, "Managed Services Supportdesk", ZAMMAD_USER, text)
+
 
 # Start your app
-if __name__ == "__main__":
+def main():
     SocketModeHandler(app, APPTOKEN).start()
+
+if __name__ == "__main__":
+    main()
 
 
 

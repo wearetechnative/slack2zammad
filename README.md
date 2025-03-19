@@ -1,4 +1,4 @@
-# In2 Zammad
+# Slack2Zammad
 
 Slack App providing a Message Shortcut to create Zammad ticket from Slack
 message
@@ -62,6 +62,41 @@ nix develop
 ### Start application
 
 python app.py
+
+### Install on nixos
+
+```
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    slack2zammad.url = "github:wearetechnative/slack2zammad"
+  };
+  outputs = { nixpkgs, slack2zammad, ... }: {
+    nixosConfigurations.<name> = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [ 
+          slack2zammad.packages."${system}".slack2zammad # slack2zammad Package
+          slack2zammad.nixosModules.${system}.slack2zammad # Slack2zammad Module
+      ];
+    };
+  };
+}
+```
+
+### slack2zammad Module
+Create an `slack2zammad.env` file in `/etc`, look at `.env.sample`.
+``` 
+{ slack2zammad, ... }:
+
+{
+  services.slack2zammad = {
+    enable  = true;
+    envFile = "/etc/slack2zammad.env"; # Default
+    group   = "slack2zammad"; # Default
+    user    = "slack2zammad"; # Default
+  };
+}
+```
 
 ## CONTRIBUTE
 

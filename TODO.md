@@ -2,12 +2,12 @@
 
 ## Next Version
 
-- extra cli arguments:
- - --envfile
- - --version
- - --help
-- nix package to run via Flake
-- nix module to include with these options via Flake
+- [x] extra cli arguments:
+ - [x] --envfile
+ - [ ] --version
+ - [x] --help
+- [x] nix package to run via Flake
+- [x] nix module to include with these options via Flake
 
 ```nix
 services.slack2zammad = {
@@ -15,8 +15,8 @@ services.slack2zammad = {
   envFile = /var/secrets/slack2zammad.env
 }
 ```
-- implementation howto for suitable for nix users
-- new release using the [release runbook](RELEASE-RUNBOOK.md)
+- [x] implementation howto for suitable for nix users
+- [x] new release using the [release runbook](RELEASE-RUNBOOK.md)
 
 ## Backlog
 

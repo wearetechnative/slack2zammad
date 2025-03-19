@@ -12,7 +12,7 @@
 
 ## Create new release
 
-- Bump version in [VERSION.txt](VERSION.txt) See which kind of version below.
+- Bump version in [_version.py](_version.py) See which kind of version below.
 
 | Please choose a version                  | Version description                                                           |
 |:-----------------------------------------|:------------------------------------------------------------------------------|
