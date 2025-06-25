@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import logging
 from _version import __version__
 
-from zammadoo import Client
+from zammadoo import Client, tickets
 
 # Some basic logging 
 logging.basicConfig(level=logging.INFO)
@@ -54,7 +54,7 @@ zamclient = Client(ZAMMAD_URL+"/api/v1/", http_auth=(ZAMMAD_USER, ZAMMAD_PASSWD)
 #print(f"ticket title: {ticket.title!r}")
 
 @app.shortcut("create_ticket")
-def create_ticket(ack, shortcut, client):
+def create_ticket(ack, context, shortcut, client, say):
 
     # Acknowledge the shortcut request
 
@@ -64,6 +64,16 @@ def create_ticket(ack, shortcut, client):
     message_text = message
 
     pprint.pp(shortcut["message"])
+    
+    global channel_id
+    channel_id = context.channel_id
+    pprint.pp(channel_id)
+
+    global thread_ts
+    event = shortcut["message"]
+    thread_ts = event.get("thread_ts", None) or event["ts"]
+    pprint.pp(thread_ts)
+
 
     #pprint.pp(client)
     initial_ticket_title = ""
@@ -103,47 +113,47 @@ def create_ticket(ack, shortcut, client):
                 {
                     "type": "divider"
                 },
-                #		{
-                #			"type": "section",
-                #			"text": {
-                #				"type": "mrkdwn",
-                #				"text": "*Customer*\nChoose a contact or customer\n\n"
-                #			},
-                #			"accessory": {
-                #				"type": "static_select",
-                #				"placeholder": {
-                #					"type": "plain_text",
-                #					"emoji": True,
-                #					"text": "Search"
-                #				},
-                #				"options": [
-                #					{
-                #						"text": {
-                #							"type": "plain_text",
-                #							"emoji": True,
-                #							"text": "Edit it"
-                #						},
-                #						"value": "value-0"
-                #					},
-                #					{
-                #						"text": {
-                #							"type": "plain_text",
-                #							"emoji": True,
-                #							"text": "Read it"
-                #						},
-                #						"value": "value-1"
-                #					},
-                #					{
-                #						"text": {
-                #							"type": "plain_text",
-                #							"emoji": True,
-                #							"text": "Save it"
-                #						},
-                #						"value": "value-2"
-                #					}
-                #				]
-                #			}
-                #		},
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Customer*\nChoose a contact or customer\n\n"
+                    },
+                    "accessory": {
+                        "type": "static_select",
+                        "placeholder": {
+                            "type": "plain_text",
+                            "emoji": True,
+                            "text": "Search"
+                        },
+                        "options": [
+                            {
+                                "text": {
+                                    "type": "plain_text",
+                                    "emoji": True,
+                                    "text": "Edit it"
+                                },
+                                "value": "value-0"
+                            },
+                            {
+                                "text": {
+                                    "type": "plain_text",
+                                    "emoji": True,
+                                    "text": "Read it"
+                                },
+                                "value": "value-1"
+                            },
+                            {
+                                "text": {
+                                    "type": "plain_text",
+                                    "emoji": True,
+                                    "text": "Save it"
+                                },
+                                "value": "value-2"
+                            }
+                        ]
+                    }
+                },
                 {
                     "type": "input",
                     "element": {
@@ -151,7 +161,7 @@ def create_ticket(ack, shortcut, client):
                         "action_id": "inputid_ticket_title",
                         "initial_value": initial_ticket_title
                     },
-                    "label": {
+                   "label": {
                         "type": "plain_text",
                         "text": "Ticket title",
                         "emoji": True
@@ -188,13 +198,31 @@ def get_field_value_from_modal_body(modal_body, field_id):
                 return value2['value']
 
 @app.view("")
-def handle_view_submission_events(ack, body, logger):
+def handle_view_submission_events(ack, context, shortcut, client, body, logger, say):
     ack()
 
     title = get_field_value_from_modal_body(body, "inputid_ticket_title" )
     text = get_field_value_from_modal_body(body, "inputid_ticket_text" )
 
-    zamclient.tickets.create(title, "Managed Services Supportdesk", ZAMMAD_USER, text)
+    ticket_new = zamclient.tickets.create(title, "Managed Services Supportdesk", ZAMMAD_USER, text)
+
+    ticket_number = str(ticket_new).split('tickets/')[-1].split('/')[0].strip(">'")
+    print(f"{ticket_number}")
+
+    ticket_url = ZAMMAD_URL+"/#ticket/zoom/"+ticket_number
+    print(ticket_url)
+
+    try:
+        ticket_mes = say(channel=channel_id ,text=f"Zammad ticket url is: {ticket_url}")
+        print(ticket_mes)
+    except:
+        print("Channel ID not found!")
+
+    if thread_ts == thread_ts:
+        say(text="works", thread_ts=thread_ts, channel=channel_id) 
+    else:
+        print("not working")
+        return
 
 
 # Start your app

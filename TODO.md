@@ -1,6 +1,17 @@
 # TODO/ROADMAP
 
-## Next Version
+## Versions v0.3.0
+
+- [ ] Return thread replies to zammad
+- [ ] 
+
+
+## Version v0.2.1
+
+- [ ] Return the ticket url to slack
+
+
+## Version v0.2.0
 
 - [x] extra cli arguments:
  - [x] --envfile
