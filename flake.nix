@@ -20,13 +20,7 @@
     nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; config.allowUnfree = true; config.cudaSupport= true; overlays = [  ];  });
   in
   {
-    nixosModules = forAllSystems (system:
-    let
-      pkgs = nixpkgsFor.${system};
-    in
-    {
-      slack2zammad =  import ./module/slack2zammad.nix;
-    });
+    nixosModules = { slack2zammad =  import ./module/slack2zammad.nix; };
 
     packages = forAllSystems (system:
     let
